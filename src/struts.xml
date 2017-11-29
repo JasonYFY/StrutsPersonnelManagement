@@ -1,0 +1,250 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE struts PUBLIC
+		    "-//Apache Software Foundation//DTD Struts Configuration 2.5//EN"
+		    "http://struts.apache.org/dtds/struts-2.5.dtd">
+<struts>
+	<!-- 设置主题 -->
+	<constant name="struts.ui.theme" value="simple" />
+	
+	<!-- 设置全局拦截器 -->
+	<package name="jason" extends="struts-default">
+		<interceptors>
+			<interceptor name="doLogin" class="com.jason.interceptors.IsLoginInterceptors" />
+			<interceptor-stack name="myStack">
+				<interceptor-ref name="defaultStack"/>
+				<interceptor-ref name="doLogin">
+					<!-- 此方法不需要拦截 -->
+					<param name="excludeMethods">userLoginForm,userLogin</param>
+					<!-- 此方法需要拦截 -->
+					<!-- <param name="includeMethods">execute</param> -->
+				</interceptor-ref>
+			</interceptor-stack>
+		</interceptors>
+		<!-- 定义包拦截器 ，若想实现全局，继承此包即可-->
+		<default-interceptor-ref name="myStack"/>
+		
+		<!-- 定义全局input返回路径 -->
+		<global-results>
+			<result type="redirect" name="input">index.jsp</result>
+		</global-results>
+	</package>
+	
+	<!-- 用户管理 -->
+	<package name="userController" extends="jason">
+		
+		<!-- 主页的页面 -->
+		<action name="index">
+			<result>/WEB-INF/content/jsp/index.jsp</result>
+		</action>
+		<action name="index2">
+			<result>/WEB-INF/content/jsp/index2.jsp</result>
+		</action>
+		<!-- 登录的页面 -->
+		<action name="loginForm" class="com.jason.action.UserAction" method="userLoginForm">
+			<result>/WEB-INF/content/jsp/user/login.jsp</result>
+		</action>
+		<!-- 添加用户的页面 -->
+		<action name="addUser">
+			<result>/WEB-INF/content/jsp/user/addUser.jsp</result>
+		</action>
+		<!-- 用户查询界面 -->
+		<action name="queryUserForm" class="com.jason.action.UserAction" method="queryUserForm">
+			<result>/WEB-INF/content/jsp/user/queryUser.jsp</result>
+		</action>
+		<!-- 用户修改界面 -->
+		<action name="updateUserForm" class="com.jason.action.UserAction" method="updateUserForm">
+			<result>/WEB-INF/content/jsp/user/updateUser.jsp</result>
+		</action>
+		<action name="user_login" class="com.jason.action.UserAction" method="userLogin">
+			<result name="success" type="redirectAction">index</result>
+			<result name="input" type="chain">loginForm</result>
+		</action>
+		<action name="user_loginout" class="com.jason.action.UserAction" method="userLoginout">
+			<result name="success" type="redirectAction">loginForm</result>
+		</action>
+		<action name="user_register" class="com.jason.action.UserValidateAction" method="userRegister">
+			<result name="success" type="chain">addUser</result>
+			<result name="input">/WEB-INF/content/jsp/user/addUser.jsp</result>
+		</action>
+		<action name="user_query" class="com.jason.action.UserAction" method="queryUser">
+			<result>/WEB-INF/content/jsp/user/queryUser.jsp</result>
+		</action>
+		<action name="quote">
+			<result>/WEB-INF/content/jsp/quote.jsp</result>
+		</action>
+		<action name="user_delete" class="com.jason.action.UserAction" method="userDelete">
+			<result type="chain">user_query</result>
+		</action>
+		<action name="user_update" class="com.jason.action.UserValidateAction" method="updateUser">
+			<result>/WEB-INF/content/jsp/user/updateUser.jsp</result>
+			<result name="input">/WEB-INF/content/jsp/user/updateUser.jsp</result>
+		</action>
+	</package>
+	
+	<!-- 部门管理 -->
+	<package name="DeptController" extends="jason">
+		<!-- 添加部门的页面 -->
+		<action name="addDeptForm">
+			<result>/WEB-INF/content/jsp/department/addDept.jsp</result>
+		</action>
+		<!-- 修改部门界面 -->
+		<action name="deptUpdateForm" class="com.jason.action.DepartmentAction" method="deptUpdateForm">
+			<result>/WEB-INF/content/jsp/department/updateDept.jsp</result>
+		</action>
+		<!-- 部门查询界面 -->
+		<action name="deptQueryForm" class="com.jason.action.DepartmentAction" method="deptQueryForm">
+			<result>/WEB-INF/content/jsp/department/queryDept.jsp</result>
+		</action>
+		<!-- 添加部门处理 -->
+		<action name="dept_add" class="com.jason.action.DepartmentAction" method="deptAdd">
+			<result type="chain">addDeptForm</result>
+		</action>
+		<action name="dept_query" class="com.jason.action.DepartmentAction" method="deptQuery">
+			<result>/WEB-INF/content/jsp/department/queryDept.jsp</result>
+		</action>
+		<action name="dept_update" class="com.jason.action.DepartmentAction" method="deptUpdate">
+			<result>/WEB-INF/content/jsp/department/updateDept.jsp</result>
+		</action>
+		<action name="dept_delete" class="com.jason.action.DepartmentAction" method="deptDelete">
+			<result type="chain">dept_query</result>
+		</action>
+	</package>
+	
+	<!-- 职位管理 -->
+	<package name="JobController" extends="jason">
+		<!-- 添加职位的页面 -->
+		<action name="addJobForm">
+			<result>/WEB-INF/content/jsp/Job/addJob.jsp</result>
+		</action>
+		<!-- 修改职位界面 -->
+		<action name="jobUpdateForm" class="com.jason.action.JobAction" method="jobUpdateForm">
+			<result>/WEB-INF/content/jsp/Job/updateJob.jsp</result>
+		</action>
+		<!-- 职位查询界面 -->
+		<action name="jobQueryForm" class="com.jason.action.JobAction" method="jobQueryForm">
+			<result>/WEB-INF/content/jsp/Job/queryJob.jsp</result>
+		</action>
+		<!-- 添加职位处理 -->
+		<action name="job_add" class="com.jason.action.JobAction" method="jobAdd">
+			<result type="chain">addJobForm</result>
+		</action>
+		<action name="job_query" class="com.jason.action.JobAction" method="jobQuery">
+			<result>/WEB-INF/content/jsp/Job/queryJob.jsp</result>
+		</action>
+		<action name="job_update" class="com.jason.action.JobAction" method="jobUpdate">
+			<result>/WEB-INF/content/jsp/Job/updateJob.jsp</result>
+		</action>
+		<action name="job_delete" class="com.jason.action.JobAction" method="jobDelete">
+			<result type="chain">job_query</result>
+		</action>
+	</package>
+	
+	<!-- 员工管理 -->
+	<package name="EmployeeController" extends="jason">
+		<!-- 添加员工界面 -->
+		<action name="employeeAddForm" class="com.jason.action.EmployeeAction" method="employeeAddForm">
+			<result>/WEB-INF/content/jsp/Employee/addEmployee.jsp</result>
+		</action>
+		<!-- 查询员工界面 -->
+		<action name="employeeQueryForm" class="com.jason.action.EmployeeAction" method="employeeQueryForm">
+			<result>/WEB-INF/content/jsp/Employee/queryEmployee.jsp</result>
+		</action>
+		<!-- 修改员工的页面 -->
+		<action name="employeeUpdateForm" class="com.jason.action.EmployeeAction" method="employeeUpdateForm">
+			<result>/WEB-INF/content/jsp/Employee/updateEmployee.jsp</result>
+		</action>
+		<action name="employee_add" class="com.jason.action.EmployeeValidateAction" method="employeeAdd">
+			<result type="chain">employeeAddForm</result>
+			<result name="input">/WEB-INF/content/jsp/Employee/addEmployee.jsp</result>
+		</action>
+		<action name="employee_query" class="com.jason.action.EmployeeAction" method="employeeQuery">
+			<result>/WEB-INF/content/jsp/Employee/queryEmployee.jsp</result>
+		</action>
+		<action name="employee_delete" class="com.jason.action.EmployeeAction" method="employeeDelete">
+			<result type="chain">employee_query</result>
+		</action>
+		<action name="employee_update" class="com.jason.action.EmployeeValidateAction" method="employeeUpdate">
+			<result>/WEB-INF/content/jsp/Employee/updateEmployee.jsp</result>
+			<result name="input">/WEB-INF/content/jsp/Employee/updateEmployee.jsp</result>
+		</action>
+	</package>
+	
+	<!-- 下载中心 -->
+	<package name="DocumentController" extends="jason">
+		<!-- 文档上传页面 -->
+		<action name="uploadFileForm">
+			<result>/WEB-INF/content/jsp/Document/uploadFile.jsp</result>
+		</action>
+		<!-- 文档查询界面 -->
+		<action name="docQueryForm" class="com.jason.action.DocumentAction" method="docQueryForm">
+			<result>/WEB-INF/content/jsp/Document/queryDocument.jsp</result>
+		</action>
+		<!-- 上传 -->
+		<action name="upload_file" class="com.jason.action.DocumentAction" method="uploadFile">
+			<interceptor-ref name="fileUpload">
+				<!-- 配置允许上传文件类型 -->
+				<!-- <param name="allowedTypes">image/png,image/gif,image/jpeg,text/plain</param> -->
+				<!-- 配置允许上传文件的大小 -->
+				<!-- <param name="maximumSize">200000</param> -->
+			</interceptor-ref>
+			<interceptor-ref name="defaultStack" />
+			<result type="chain" name="success">uploadFileForm</result>
+			<result name="input">/WEB-INF/content/jsp/Document/uploadFile.jsp</result>
+		</action>
+		<!-- 文档查询处理 -->
+		<action name="doc_query" class="com.jason.action.DocumentAction" method="docQuery">
+			<result>/WEB-INF/content/jsp/Document/queryDocument.jsp</result>
+		</action>
+		<!-- 删除处理 -->
+		<action name="doc_delete" class="com.jason.action.DocumentAction" method="docDelete">
+			<result type="chain">docQueryForm</result>
+		</action>
+		<!-- 下载 -->
+		<action name="doc_download" class="com.jason.action.DocumentAction">
+			<result name="success" type="stream">
+				<!-- 指获取下载文件输入流的入口方法 -->
+				<param name="inputName">docDownload</param>
+				<param name="contentDisposition">attachment;filename=${uploadDataFileName}</param>
+				<param name="bufferSize">4096</param>
+			</result>
+		</action>
+		
+	</package>
+	
+	<!-- Ajax -->
+	<package name="json" extends="json-default">
+		<action name="check_loginname" class="com.jason.action.UserAction" method="checkLoginname">
+			<interceptor-ref name="defaultStack" />
+			<interceptor-ref name="json" />
+			<result type="json">
+				<param name="noCache">true</param>
+				<param name="contentType">text/json</param>
+			</result>
+		</action>
+		<action name="check_deptName" class="com.jason.action.DepartmentAction" method="checkDeptName">
+			<interceptor-ref name="defaultStack" />
+			<interceptor-ref name="json" />
+			<result type="json">
+				<param name="noCache">true</param>
+				<param name="contentType">text/json</param>
+			</result>
+		</action>
+		<action name="check_jobName" class="com.jason.action.JobAction" method="checkJobName">
+			<interceptor-ref name="defaultStack" />
+			<interceptor-ref name="json" />
+			<result type="json">
+				<param name="noCache">true</param>
+				<param name="contentType">text/json</param>
+			</result>
+		</action>
+		<action name="check_cardId" class="com.jason.action.EmployeeAction" method="checkCardId">
+			<interceptor-ref name="defaultStack" />
+			<interceptor-ref name="json" />
+			<result type="json">
+				<param name="noCache">true</param>
+				<param name="contentType">text/json</param>
+			</result>
+		</action>
+	</package>
+	
+</struts>

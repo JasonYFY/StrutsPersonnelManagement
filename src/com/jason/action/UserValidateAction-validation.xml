@@ -1,0 +1,36 @@
+<!DOCTYPE validators PUBLIC
+  "-//Apache Struts//XWork Validator 1.0.3//EN"
+  "http://struts.apache.org/dtds/xwork-validator-1.0.3.dtd">
+
+<validators>
+	<field name="password">
+		<field-validator type="requiredstring">
+			<message>密码不能为空</message>
+		</field-validator>
+	</field>
+	<field name="loginname">
+		<field-validator type="requiredstring">
+			<message>登录名不能为空</message>
+		</field-validator>
+	</field>
+	<!-- 
+	<field name="date">
+		<field-validator type="required">
+			<message>生产日期不能为空</message>
+		</field-validator>
+	</field>
+	<field name="price">
+		<field-validator type="required">
+			<message>价格不能为空</message>
+		</field-validator>
+		<field-validator type="fieldexpression">
+			<param name="expression">250>=goods.price</param>
+			<message>价格必须是在50到250区域之间</message>
+		</field-validator>
+		<field-validator type="fieldexpression">
+			<param name="expression">goods.price>=50</param>
+			<message>价格必须是在50到250区域之间</message>
+		</field-validator>
+	</field> -->
+	
+</validators>
